@@ -4,11 +4,13 @@ const express=require('express');
 //server instance is created
 const app= express();
 
-//server is running on port 3000
-//the callback runs when our server is good to go and listening to the port
-app.listen(3000, ()=>{
-    console.log("server is running onport 3000")
-})
+//middleware to parse incoming request body as JSON
+app.use(express.json())  
+
+
+const notes= []
+
+
 
 app.get('/', (req,res)=>{
     res.send("This is home page")
@@ -20,6 +22,27 @@ app.get('/about', (req,res)=>{
 
 app.get('/services', (req,res)=>{
     res.send("This is services page")
+})
+
+
+app.post('/notes', (req,res)=>{
+    notes.push(req.body)
+    res.send(notes)
+})
+
+app.get('/notes', (req,res)=>{
+    res.send(notes)
+})
+
+
+
+
+
+
+//server is running on port 3000
+//the callback runs when our server is good to go and listening to the port
+app.listen(3000, ()=>{
+    console.log("server is running onport 3000")
 })
 
 //an API is a set of rules or protocols which are used to share data with softwares accross the internet and enables the communications for softwares with data.
@@ -35,3 +58,4 @@ app.get('/services', (req,res)=>{
 // DELETE: deletes a resource from the server.
 //{an idempotent method produces the same result no matter how many times it is invoked. beside POST all are idempotent in nature.}
 
+// bydefault express doesn't parse the incoming request body, we need to use middleware to do that. and that middleware is app.use(express.json()).
