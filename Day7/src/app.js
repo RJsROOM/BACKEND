@@ -23,5 +23,17 @@ app.post("/notes", async (req,res)=>{
 })
 
 
+app.get("/notes",async (req,res)=>{
+    const notes= await noteModel.find()
+
+    res.status(200).json({
+        message:"notes fetched successfully",
+        notes
+    })
+})
+
 
 module.exports=app;
+
+
+//noteModel.find() always gives output in array of objects format even if there is only one note in database or no note at all. If there is no note at all then it gives empty array as output.
