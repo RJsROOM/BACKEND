@@ -2,10 +2,12 @@
 
 const express= require('express');
 const noteModel = require('./models/notes.model');
+const cors= require('cors')
 
 const app= express();
 
 app.use(express.json());
+app.use(cors())
 
 
 app.post('/api/notes',async (req,res)=>{
@@ -55,3 +57,5 @@ app.patch('/api/notes/:id',async (req,res)=>{
 
 
 module.exports=app
+
+//the CORS error is that error which tells that you can't access another site's data from your site.
