@@ -19,6 +19,7 @@ html{
   gap: 20px;
   padding-block: 2rem;
   padding-inline: 3rem;
+  flex-wrap: wrap;
 }
 
 .note{
