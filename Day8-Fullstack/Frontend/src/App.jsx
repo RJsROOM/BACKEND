@@ -32,7 +32,7 @@ const App = () => {
   }
 
   function handleDeleteNote(noteId) {
-    axios.delete("http://localhost:3000/api/notes/" + noteId).then((res) => {
+    axios.delete(`http://localhost:3000/api/notes/${noteId}`).then((res) => {
       console.log(res.data);
       fetchNotes();
     });
@@ -43,7 +43,7 @@ const App = () => {
     setUpdatedDesc(note.description);
   }
 
-  function handleUpdateNote(noteId) {
+function handleUpdateNote(noteId) {
   axios.patch(`http://localhost:3000/api/notes/${noteId}`, {
     description: updatedDesc
   })
@@ -55,9 +55,8 @@ const App = () => {
           : note
       )
     );
-    setSelectedNoteId(null); // exit edit mode
+    setSelectedNoteId(null);
   })
-  .catch(err => console.error(err));
 }
 
   return (
@@ -71,7 +70,9 @@ const App = () => {
         {notes.map((note) => {
           return (
             <div key={note._id} className="note">
+
               <h1>{note.title}</h1>
+
               {selectedNoteId === note._id ? (
                 <>
                   <textarea
@@ -90,7 +91,9 @@ const App = () => {
                 </>
               )}
 
-              <button onClick={() => handleDeleteNote(note._id)}>Delete</button>
+              <button onClick={() => handleDeleteNote(note._id)}>
+                Delete
+              </button>
             </div>
           );
         })}
