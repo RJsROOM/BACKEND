@@ -43,7 +43,8 @@ const App = () => {
     setUpdatedDesc(note.description);
   }
 
-function handleUpdateNote(noteId) {
+  // TOOK HELP OF AI for this
+  function handleUpdateNote(noteId) {
   axios.patch(`http://localhost:3000/api/notes/${noteId}`, {
     description: updatedDesc
   })
@@ -57,7 +58,7 @@ function handleUpdateNote(noteId) {
     );
     setSelectedNoteId(null);
   })
-}
+  }
 
   return (
     <>
