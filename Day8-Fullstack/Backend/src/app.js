@@ -3,11 +3,13 @@
 const express= require('express');
 const noteModel = require('./models/notes.model');
 const cors= require('cors')
+const path= require('path')
 
 const app= express();
 
 app.use(express.json());
 app.use(cors())
+app.use(express.static('./public'))
 
 
 app.post('/api/notes',async (req,res)=>{
@@ -55,7 +57,17 @@ app.patch('/api/notes/:id',async (req,res)=>{
 })
 */
 
+app.use('*name', (req,res)=>{
+    res.sendFile(path.join(__dirname,"..","/public/index.html"))
+})
+
 
 module.exports=app
 
 //the CORS error is that error which tells that you can't access another site's data from your site.
+
+//*name is the wildcard api which redirects all our non-created routes to the response we write inside it.
+
+//__dirname gives us the absolute path of our file in which it is written and since we have to give the address till index.html which we imported from frontend so we write those lines of code...{very helpful-production wise}
+
+//app.use(express.static("./public"))---on line 12---it gives the css and js static files from the public folder to the *name(all) wildcards so that if user hits any foreign route then it should only show our note creation page.

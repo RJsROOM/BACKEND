@@ -42,7 +42,6 @@ const App = () => {
     setSelectedNoteId(note._id);
     setUpdatedDesc(note.description);
   }
-
   // TOOK HELP OF AI for this
   function handleUpdateNote(noteId) {
   axios.patch(`http://localhost:3000/api/notes/${noteId}`, {
@@ -88,7 +87,7 @@ const App = () => {
               ) : (
                 <>
                   <p>{note.description}</p>
-                  <button onClick={() => handleSelectNote(note)}>Edit</button>
+                  <button onClick={() => handleSelectNote(note)}>Update Desc</button>
                 </>
               )}
 
