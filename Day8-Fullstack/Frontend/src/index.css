@@ -29,3 +29,45 @@ html{
   max-width: 20rem;
   color: teal;
 }
+.notes button{
+  padding-inline: 3px;
+  padding-block: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(165, 27, 78);
+  color: whitesmoke;
+  border: none;
+}
+.notes button:hover{
+  scale: 1.05;
+}
+
+
+.note-create-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40%;
+  margin-top: 5%;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  padding-inline: 3rem;
+  width: fit-content;
+  text-align: center;
+  border-radius: 40px;
+}
+.note-create-form input{
+  display: inline-block;
+  padding-inline: 5px;
+  padding-block: 3px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+}
+.note-create-form button{
+  border-radius: 5px;
+  padding-inline: 5px;
+  padding-block: 2px;
+  cursor: pointer;
+}
