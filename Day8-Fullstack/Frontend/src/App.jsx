@@ -3,68 +3,97 @@ import axios from "axios";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
+  const [updatedDesc, setUpdatedDesc] = useState("");
+  const [selectedNoteId, setSelectedNoteId] = useState(null)
 
-  function fetchNotes(){
+  function fetchNotes() {
     axios.get("http://localhost:3000/api/notes").then((res) => {
       setNotes(res.data.notes);
     });
   }
-  useEffect(()=>{
+  useEffect(() => {
     fetchNotes();
-  }, [])
+  }, []);
 
-
-  function handleSubmit(e){
+  function handleSubmit(e) {
     e.preventDefault();
 
-    const {title, description} = e.target.elements;
+    const { title, description } = e.target.elements;
 
-    axios.post("http://localhost:3000/api/notes", {
-      title: title.value,
-      description: description.value
-    })
-    .then(res=>{
-      console.log(res.data)
-      fetchNotes()
-    })
+    axios
+      .post("http://localhost:3000/api/notes", {
+        title: title.value,
+        description: description.value,
+      })
+      .then((res) => {
+        console.log(res.data);
+        fetchNotes();
+      });
   }
 
-
-  function handleDeleteNote(noteId){
-    axios.delete("http://localhost:3000/api/notes/"+ noteId)
-    .then(res=>{
-      console.log(res.data)
-      fetchNotes()
-    })
+  function handleDeleteNote(noteId) {
+    axios.delete("http://localhost:3000/api/notes/" + noteId).then((res) => {
+      console.log(res.data);
+      fetchNotes();
+    });
   }
-  
 
+  function handleSelectNote(note) {
+    setSelectedNoteId(note._id);
+    setUpdatedDesc(note.description);
+  }
+
+  function handleUpdateNote(noteId) {
+  axios.patch(`http://localhost:3000/api/notes/${noteId}`, {
+    description: updatedDesc
+  })
+  .then(() => {
+    setNotes(prev =>
+      prev.map(note =>
+        note._id === noteId
+          ? { ...note, description: updatedDesc }
+          : note
+      )
+    );
+    setSelectedNoteId(null); // exit edit mode
+  })
+  .catch(err => console.error(err));
+}
 
   return (
     <>
-      <form 
-      onSubmit={handleSubmit}
-      className="note-create-form">
+      <form onSubmit={handleSubmit} className="note-create-form">
         <input name="title" type="text" placeholder="Title" />
         <input name="description" type="text" placeholder="Description" />
         <button type="submit">Create note</button>
       </form>
       <div className="notes">
-        {
-          notes.map((note) => {
-            return (
-              <div className="note">
-                <h1>{note.title}</h1>
-                <p>{note.description}</p>
-                <button
-                onClick={()=>handleDeleteNote(note._id)}
-                >
-                  Delete
-                </button>
-              </div>
-            );
-          })
-        }
+        {notes.map((note) => {
+          return (
+            <div key={note._id} className="note">
+              <h1>{note.title}</h1>
+              {selectedNoteId === note._id ? (
+                <>
+                  <textarea
+                    value={updatedDesc}
+                    onChange={(e) => setUpdatedDesc(e.target.value)}
+                  />
+
+                  <button onClick={() => handleUpdateNote(note._id)}>
+                    Save
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>{note.description}</p>
+                  <button onClick={() => handleSelectNote(note)}>Edit</button>
+                </>
+              )}
+
+              <button onClick={() => handleDeleteNote(note._id)}>Delete</button>
+            </div>
+          );
+        })}
       </div>
     </>
   );

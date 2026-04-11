@@ -17,7 +17,7 @@ html{
 .notes{
   display: flex;
   gap: 20px;
-  padding-block: 2rem;
+  padding-block: 1rem;
   padding-inline: 3rem;
   flex-wrap: wrap;
 }
@@ -26,11 +26,21 @@ html{
   background-color: #494949;
   padding: 1rem;
   border-radius: 0.7rem;
-  max-width: 20rem;
+  max-width: 25rem;
   color: teal;
 }
+.note h1{
+  margin-bottom: 8px;
+}
+.note p{
+  margin-bottom: 10px;
+}
 .notes button{
-  padding-inline: 3px;
+  display: inline-block;
+  margin-right: 10px;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 5px;
   padding-block: 2px;
   border-radius: 5px;
   cursor: pointer;
