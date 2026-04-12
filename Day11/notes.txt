@@ -1,0 +1,14 @@
+Four pillars of backend---
+1. Authentication:
+                identifying which user has requested the data from our servers is called Authentication.
+2. Authorisation:
+                it is the concept which tells us that what a user can do in our website.
+3. Validation:
+            when we are checking the format of our some specific data then it is called validation.
+4. Verification:
+              when we are checking whether our data is correct or not wrt to the platform's database then it is called verification.
+
+whenever a user comes to a website he/she needs to register first in which we get an object containing the name,email,password like credentials. Our server then works on that data in these steps:
+    1. saves the data in our Db.
+    2. creates Token for that user which is unique for every user who registers.
+    3. the same token which was created by the server is then sent to the users's browser, so that the token can be used for authenticating the user(all the tokens have their own expiry which we can set).
