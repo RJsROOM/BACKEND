@@ -75,6 +75,20 @@ authRouter.post('/login',async (req,res)=>{
 })
 
 
+authRouter.get('/get-me', async(req,res)=>{
+    const token= req.cookies.token;
+
+    const decoded= jwt.verify(token, process.env.JWT_SECRET);
+
+    const user= await userModel.findOne(decoded.id);
+
+    res.status(200).json({
+        name: user.name,
+        email:user.email
+    })
+})
+
+
 
 module.exports= authRouter;
 
@@ -86,5 +100,5 @@ module.exports= authRouter;
         - hashing of same data gives same results always
         - we can not reverse the hashing to find what that means..this secures our passwords.
 
-
+jwt.verify is used to check whether our token is created by our own server or not. the /get-me API is used to give the register credentials to the user. 
 */
