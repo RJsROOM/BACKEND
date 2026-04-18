@@ -1,0 +1,29 @@
+IG-CLONE-FEATURES=
+{
+    Authentication:
+        -register(1.user ka data save krna 2.user ko token dena)
+        -login
+        -logout(token blacklisting)
+        -otp based registeration(optional)
+
+    posts:
+        -like posts
+        -create post
+        -delete post
+        -save post
+        -can see the feed
+
+    users:
+        -followers
+        -following
+}
+
+
+useschema:
+    user:{
+        username: string,
+        password: string,
+        email: string,
+        bio: string,
+        profile_img: string
+    }
