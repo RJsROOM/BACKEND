@@ -68,6 +68,60 @@ authRouter.post('/register', async(req,res)=>{
 })
 
 
+authRouter.post('/login', async(req,res)=>{
+    const {email,username,password}= req.body;
+
+    /* login can be done via--
+        username-password || email-password  
+    */
+    const user= await userModel.findOne({
+        $or:[
+            {
+                // condition 1
+                email: email
+            },
+            {
+                // condition 2
+                username: username
+            }
+        ]
+    })
+
+
+    if(!user){
+        return res.status(404).json({
+            message: "user not found"
+        })
+    }
+
+
+    const hash= crypto.createHash('sha256').update(password).digest('hex');
+
+    if(hash!==user.password){
+        return res.status(401).json({
+            message: "invalid credentials"
+        })
+    }
+
+
+    const token= jwt.sign({
+        id:user._id
+    }, process.env.JWT_SECRET, {expiresIn: "1d"})
+
+
+    res.cookie('token', token)
+
+    res.status(200).json({
+        message: "user logged-in successfully",
+        user:{
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profileImg: user.profileImg
+        }
+    })
+})
+
 
 module.exports= authRouter;
 
