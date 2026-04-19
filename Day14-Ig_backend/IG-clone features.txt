@@ -9,6 +9,12 @@ IG-CLONE-FEATURES=
     posts:
         -like posts
         -create post
+            {
+                caption: string
+                img_ur: string
+                user:user_id
+                createdAt: date-time
+            }
         -delete post
         -save post
         -can see the feed

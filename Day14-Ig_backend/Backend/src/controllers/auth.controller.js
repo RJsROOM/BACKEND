@@ -1,5 +1,5 @@
 const userModel= require('../models/user.model')
-const crypto= require('crypto')
+const bcrypt= require('bcryptjs')
 const jwt= require('jsonwebtoken')
 
 
@@ -33,7 +33,7 @@ async function registerController(req,res){
     }
 
 
-    const hash= crypto.createHash('sha256').update(password).digest('hex');
+    const hash= await bcrypt.hash(password, 10);
 
     const user= await userModel.create({
         username,
@@ -93,9 +93,10 @@ async function loginController(req,res){
     }
 
 
-    const hash= crypto.createHash('sha256').update(password).digest('hex');
+    // const hash= await bcrypt.hash(password, 10);
+    const isPasswordValid= await bcrypt.compare(password, user.password)
 
-    if(hash!==user.password){
+    if(!isPasswordValid){
         return res.status(401).json({
             message: "invalid credentials"
         })
@@ -128,3 +129,11 @@ module.exports={
 }
 
 //$or:[] -- it queries through our db whether any of the elements inside in it are available or not
+
+/*  
+
+since we were saving passwords from the user in hash format and everytime we were comparing by converting and matching it from the db..this is very tedious form of development and is not preferred in the industry. crypto is very low level and has very few features than the bcryptjs
+so we use a library bcryptjs to solve this issue.
+bcypt.has(password, 10) 10 is the salt which tells how many layers of hashing to be done.
+
+*/
