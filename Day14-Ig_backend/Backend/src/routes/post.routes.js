@@ -13,6 +13,23 @@ req.body- {caption, imageUrl}
 postRouter.post('/createpost',upload.single('image'), postController.createPostController)
 
 
+/*
+GET /api/posts/getpost [protexted]
+*/
+postRouter.get('/getpost', postController.getPostController)
+
+
+/*
+GET /api/posts/details/:postid
+    - return details of a specific post
+    - also check whether the request was made by that same user or not and then only send details
+*/
+postRouter.get('/details/:postid', postController.getDetailsOfPostController)
+
+
+
+
+
 module.exports= postRouter
 
 /*
