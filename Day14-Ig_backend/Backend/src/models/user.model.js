@@ -30,3 +30,13 @@ const userModel= mongoose.model('users', userSchema);
 
 
 module.exports= userModel;
+
+/*
+for storing id's of the users, one id takes approx 12bytes of the space and depeneding upon the following and followers that may go in GIGABYTES for just a single user. and our mongoDb only allows us the space of 16MB.
+
+for this we use EDGE COLLECTIONS, the collection which tells us the relations between the documents of the collection that collectionn is called as edge collection.
+
+and for this we create another model for them.
+
+
+*/
