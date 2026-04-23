@@ -24,3 +24,4 @@ const postModel=mongoose.model('posts', postSchema);
 module.exports= postModel;
 
 //when you require the reference of another collection for traversing their data we use ref and give type as shown above in the user object of the scehma.
+

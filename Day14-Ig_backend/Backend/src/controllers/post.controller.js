@@ -11,24 +11,6 @@ const imagekit= new ImageKit({
 async function createPostController(req,res){
     // console.log(req.body,req.file)
 
-    const token= req.cookies.token;
-
-    if(!token){
-        return res.status(401).json({
-            message: "unauthorised access"
-        })
-    }
-
-    let decoded= null;
-
-    try{
-        decoded= jwt.verify(token, process.env.JWT_SECRET)
-    }catch(err){
-        return res.status(401).json({
-            message: "user not found"
-        })
-    }
-
     const file= await imagekit.files.upload({
         file: req.file.buffer.toString('base64'),
         fileName: "images",
@@ -38,7 +20,7 @@ async function createPostController(req,res){
     const post= await postModel.create({
         caption: req.body.caption,
         imgUrl: file.url,
-        user: decoded.id
+        user: req.user.id
     })
 
     res.status(201).json({
@@ -48,24 +30,8 @@ async function createPostController(req,res){
 }
 
 async function getPostController(req,res){
-    const token= req.cookies.token
-    if(!token){
-        return res.status(401).json({
-            message: "unauthorised access"
-        })
-    }
 
-
-    let decoded=null;
-    try{
-        decoded= jwt.verify(token,process.env.jWT_SECRET)
-    }catch(err){
-        return res.status(401).json({
-            message: "token invalid"
-        })
-    }
-
-    const userId= decoded.id;
+    const userId= req.user.id;
 
     const posts= await postModel.find({
         user: userId
@@ -80,23 +46,7 @@ async function getPostController(req,res){
 
 async function getDetailsOfPostController(req,res){
 
-    const token = req.cookies.token;
-    if(!token){
-        return res.status(401).json({
-            message: "unauthorised access"
-        })
-    }
-
-    let decoded;
-    try{
-        decoded= jwt.verify(token, process.env.JWT_SECRET);
-    }catch(err){
-        return res.status(401).json({
-            message: "user not found"
-        })
-    }
-
-    const userId= decoded.id
+    const userId= req.user.id
     const postId= req.params.postid;
 
     const post= await postModel.findById(postId);
@@ -129,5 +79,7 @@ module.exports={
 
 /*
 line-110--- when we are comparing two object id we have two method- equals() and toString()...and using toString() was more suitable because the decoded gives userId as a string and so we converted our post.user to string
+
+since we have hecked for the user in every API and this makes our code very bad so to remove this we create our middleware in the middlewares folder(auth.middleware.js) so that the repetitive tasks are not written over and over agian.
 
 */

@@ -2,6 +2,8 @@ const express= require('express');
 const postController=  require('../controllers/post.controller')
 const multer= require('multer')
 const upload= multer({storage: multer.memoryStorage()})
+const idenntifyuser= require('../middlewares/auth.middleware');
+const identifyuser = require('../middlewares/auth.middleware');
 
 
 const postRouter= express.Router();
@@ -10,13 +12,13 @@ const postRouter= express.Router();
 POST /api/posts/createpost [protected]-{if token then only create post}
 req.body- {caption, imageUrl}
 */
-postRouter.post('/createpost',upload.single('image'), postController.createPostController)
+postRouter.post('/createpost',upload.single('image'), identifyuser, postController.createPostController)
 
 
 /*
 GET /api/posts/getpost [protexted]
 */
-postRouter.get('/getpost', postController.getPostController)
+postRouter.get('/getpost', identifyuser, postController.getPostController)
 
 
 /*
@@ -24,7 +26,7 @@ GET /api/posts/details/:postid
     - return details of a specific post
     - also check whether the request was made by that same user or not and then only send details
 */
-postRouter.get('/details/:postid', postController.getDetailsOfPostController)
+postRouter.get('/details/:postid', identifyuser, postController.getDetailsOfPostController)
 
 
 
