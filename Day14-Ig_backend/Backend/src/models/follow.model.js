@@ -2,20 +2,19 @@ const mongoose= require('mongoose');
 
 const followSchema= new mongoose.Schema({
     follower:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-        required: [true, "follower is required"]
+        type: String,
     },
     followee: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-        required: [true, "followee is required"]
+        type: String,
     }
 },{
     timestamps: true
 })
 
 
-const followModel= mo0ngoose.model('follows', followSchema);
+followSchema.index({follower:1, followee:1}, {unique:true})
+
+
+const followModel= mongoose.model('follows', followSchema);
 
 module.exports= followModel;
