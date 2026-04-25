@@ -1,4 +1,5 @@
 import '../style/form.scss'
+import { Link } from 'react-router-dom'
 
 const login = () => {
   return (
@@ -14,6 +15,8 @@ const login = () => {
                     Login
                 </button>
             </form>
+
+            <p>Don't have an account? <Link className='toggleAuthForm' to='/register'>Register</Link></p>
         </div>
     </main>
   )
