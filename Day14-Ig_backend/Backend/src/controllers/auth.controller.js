@@ -125,9 +125,28 @@ async function loginController(req,res){
 
 
 
+async function getMeController(req,res){
+    const userId= req.user.id;
+
+    const user= await userModel.findById(userId);
+
+    res.status(200).json({
+        message: "user data fetched successfully",
+        user:{
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profileImg: user.profileImg
+        }
+    })
+}
+
+
+
 module.exports={
     registerController,
-    loginController
+    loginController,
+    getMeController
 }
 
 //$or:[] -- it queries through our db whether any of the elements inside in it are available or not
