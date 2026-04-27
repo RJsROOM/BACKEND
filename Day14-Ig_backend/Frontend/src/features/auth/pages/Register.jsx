@@ -76,4 +76,9 @@ there are 4 layers in the react architecture--
 
 like we have used the api calling in login and register pages, we now have to shift them into the API layer.which is put under sevices folder with the name of auth.api.js
 
+and for setting the states layer we can use Redux but here we will use Context..for this we create auth.context.js file under the auth folder only.
+
+
+our this UI layer only communicates with the hook layer and doesn't cares about what happens in the state and api layers because the hoo will communicate with state layer and state with api layer itself.
+
 */

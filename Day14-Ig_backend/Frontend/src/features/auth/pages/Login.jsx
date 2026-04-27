@@ -1,16 +1,31 @@
 import { useState } from 'react';
 import '../style/form.scss'
 import { Link } from 'react-router-dom'
+import {useAuth} from '../hooks/useAuth'
+import {useNavigate} from 'react-router-dom'
+
 
 const Login = () => {
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
 
+    const {handleLogin, loading}= useAuth();
+    const navigate= useNavigate();
+
+    if(loading){
+        return <h1> Loading... </h1>
+    }
+    
     async function handleSubmit(e){
         e.preventDefault();
 
+        handleLogin(email, password)
+        .then(res=>{
+            console.log(res)
+            navigate('/')
+        })
     }
 
 
@@ -23,7 +38,7 @@ const Login = () => {
             </h1>
             <form onSubmit={handleSubmit}>
                 <input 
-                    onInput={(e)=>setUsername(e.target.value)}
+                    onInput={(e)=>setEmail(e.target.value)}
                     type="text" 
                     placeholder="Enter Username" 
                     name="username" 
@@ -59,5 +74,10 @@ there are 4 layers in the react architecture--
 4. API layer is reponsible for handling all the api calls and requests.
 
 like we have used the api calling in login and register pages, we now have to shift them into the API layer. which is put under sevices folder with the name of auth.api.js
+
+and for setting the states layer we can use Redux but here we will use Context..for this we create auth.context.js file under the auth folder only.
+
+
+our this UI layer only communicates with the hook layer and doesn't cares about what happens in the state and api layers because the hoo will communicate with state layer and state with api layer itself.
 
 */
