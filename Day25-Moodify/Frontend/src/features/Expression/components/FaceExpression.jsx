@@ -163,6 +163,7 @@ in this we hve used BLACKBOX programming approach. this approach tells us that w
 
 
 Token Blacklisting:
+                  it is a wya of invalidating a JWT token before its expiration time. it is used to prevent unauthorized access to protected resources by revoking the token's validity. when a user logs out or their session is terminated, the token is added to a blacklist named list, and any subsequent requests with that token are denied which secures the application by ensuring that only valid tokens are accepted for authentication and authorization.
                   
 
 */
