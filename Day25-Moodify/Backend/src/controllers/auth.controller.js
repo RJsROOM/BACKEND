@@ -54,7 +54,7 @@ async function loginUser(req,res){
             {email},
             {username}
         ]
-    })
+    }).select("+password")  //userschema k andar password false tha to agr usko chiye rhta h to + lgakr likhte h
 
     if(!user){
         return res.status(400).json({
@@ -87,6 +87,15 @@ async function loginUser(req,res){
     })
 }
 
+async function getMe(req,res){
+    const user= await userModel.findById(req.user.id);
+
+    res.status(200).json({
+        message: "user fetched successfully",
+        user
+    })
+}
 
 
-module.exports= {registerUser, loginUser}
+
+module.exports= {registerUser, loginUser, getMe}
