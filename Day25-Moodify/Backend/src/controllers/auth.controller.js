@@ -3,6 +3,7 @@
 const userModel= require("../models/user.model");
 const jwt= require("jsonwebtoken");
 const bcrypt= require("bcryptjs");
+const blacklistModel= require("../models/blacklist.model");
 
 
 async function registerUser(req,res){
@@ -96,6 +97,21 @@ async function getMe(req,res){
     })
 }
 
+async function logoutUser(req,res){
+
+    const token= req.cookies.token;
+
+    res.clearCookie("token"); 
+
+    await blacklistModel.create({
+        token
+    })
+
+    res.status(201).json({
+        message: "logout successfull"
+    })
+}
 
 
-module.exports= {registerUser, loginUser, getMe}
+
+module.exports= {registerUser, loginUser, getMe, logoutUser}
