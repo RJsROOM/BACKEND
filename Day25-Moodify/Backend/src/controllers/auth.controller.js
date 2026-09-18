@@ -110,7 +110,7 @@ async function logoutUser(req,res){
     // })
 
     //this is how we add blacklist in redis
-    await redis.set(token, Date.now().toString());
+    await redis.set(token, Date.now().toString(), "EX", 60*60);
 
     res.status(201).json({
         message: "logout successfull"
