@@ -2,6 +2,7 @@
 
 const blacklistModel = require("../models/blacklist.model");
 const userModel= require("../models/user.model");
+const redis= require("../config/cache");
 const jwt= require("jsonwebtoken");
 
 async function authUser(req, res, next){
@@ -46,4 +47,9 @@ module.exports= {authUser}
 
 /*
  at line 17, the jwt.verify will throw an error if the token is expired and for that error only we use try-catch block to recieve the error.
+
+
+ reids ko middleware me q import kiye?
+                qki redis ka istmaal krre h hm taki blacklist k saare read/write operations ko manage kr ske..or qki balcklist ko hm authUser me use krre h islie redis ko uss file me import kie jisme blacklist maintain horha h
+ authUser file hme autheniticate krke sirf valid users hi filter krke deta h req.user me store krke.
 */
