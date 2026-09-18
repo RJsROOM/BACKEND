@@ -4,6 +4,7 @@ const userModel= require("../models/user.model");
 const jwt= require("jsonwebtoken");
 const bcrypt= require("bcryptjs");
 const blacklistModel= require("../models/blacklist.model");
+const redis= require("../config/cache");
 
 
 async function registerUser(req,res){
@@ -103,9 +104,13 @@ async function logoutUser(req,res){
 
     res.clearCookie("token"); 
 
-    await blacklistModel.create({
-        token
-    })
+    //this is how we add blacklist in mongo
+    // await blacklistModel.create({ 
+    //     token
+    // })
+
+    //this is how we add blacklist in redis
+    await redis.set(token, Date.now().toString());
 
     res.status(201).json({
         message: "logout successfull"
@@ -115,3 +120,12 @@ async function logoutUser(req,res){
 
 
 module.exports= {registerUser, loginUser, getMe, logoutUser}
+
+/*
+
+redis me pehla argument to token diye or dusra argument ko string me q convert kiye?
+            as we know ki redis stores values in key-value pairs like javascript stores to jb key-value pairs me store krte h to key to normal name rheta h mgr uska value string me store hota h..or isilie redis me dusra argument string me convert krna rhta h.
+
+jese mongodb k paas mongodb compass hota h jo hme databas eme stores data ko dekhne k kaam aata h wese hi redis k paas bi uska ek application hota h jo hme redis db k andr jo data stored h usko dekhne me kaam aat h or uska naam h REDIS INSIGHT.
+
+*/
