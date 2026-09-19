@@ -1,40 +1,45 @@
 import { useEffect, useRef, useState } from "react";
-import {detectExpression, init} from '../utils/utils'
+
+import {
+  init,
+} from "../utils/utils";
 
 export default function FaceExpression() {
   const videoRef = useRef(null);
   const faceLandmarkerRef = useRef(null);
-
-  // Store camera stream in a ref
   const streamRef = useRef(null);
 
-  const [expression, setExpression] = useState("Detecting...");
+  const [expression, setExpression] =
+    useState("Detecting...");
 
-  // ---------------------------------------------
-  // USE EFFECT
-  // ---------------------------------------------
+  const [confidence, setConfidence] =
+    useState(0);
 
   useEffect(() => {
-    init({faceLandmarkerRef, videoRef, streamRef});
+    init({
+      faceLandmarkerRef,
+      videoRef,
+      streamRef,
+      setExpression,
+      setConfidence,
+    });
 
-
-    // Cleanup
     return () => {
+      // Stop camera
+      if (streamRef.current) {
+        streamRef.current
+          .getTracks()
+          .forEach((track) => track.stop());
 
-    if(faceLandmarkerRef.current) {
-      faceLandmarkerRef.current.close()
-    }
+        streamRef.current = null;
+      }
 
-    if(videoRef.current?.srcObject){
-      videoRef.current.srcObject
-        .getTracks()
-        .forEach((track)=> track.stop());
-    }
+      // Close MediaPipe
+      faceLandmarkerRef.current?.close();
+
+      faceLandmarkerRef.current = null;
     };
-  
   }, []);
-
-
 
   return (
     <div style={styles.container}>
@@ -49,91 +54,18 @@ export default function FaceExpression() {
       />
 
       <div style={styles.result}>
-          <h3>{expression}</h3>
+        <h3>{expression}</h3>
+
+        {confidence > 0 && (
+          <p>
+            Confidence:{" "}
+            {(confidence * 100).toFixed(1)}%
+          </p>
+        )}
       </div>
-      <button onClick={()=>{detectExpression({faceLandmarkerRef, videoRef, setExpression})}}></button>
     </div>
   );
 }
-
-
-// ---------------------------------------------
-// EXPRESSION DETECTION
-// ---------------------------------------------
-
-function getExpression(scores) {
-  // Smile
-  const smile = average(
-    scores.mouthSmileLeft ?? 0,
-    scores.mouthSmileRight ?? 0
-  );
-
-  // Frown
-  const frown = average(
-    scores.mouthFrownLeft ?? 0,
-    scores.mouthFrownRight ?? 0
-  );
-
-  // Eyebrows down
-  const browDown = average(
-    scores.browDownLeft ?? 0,
-    scores.browDownRight ?? 0
-  );
-
-  // Eyes wide
-  const eyeWide = average(
-    scores.eyeWideLeft ?? 0,
-    scores.eyeWideRight ?? 0
-  );
-
-  // Mouth open
-  const jawOpen = scores.jawOpen ?? 0;
-
-
-  // ---------------------------------------------
-  // Calculate expression scores
-  // ---------------------------------------------
-
-  const expressions = {
-    Happy: smile,
-
-    Sad: frown,
-
-    Angry: browDown,
-
-    Surprised: (eyeWide + jawOpen) / 2,
-
-    Neutral: 0.2,
-  };
-
-
-  // Find highest score
-  const [name, score] = Object.entries(expressions)
-    .sort((a, b) => b[1] - a[1])[0];
-
-
-  return {
-    name,
-    confidence: Math.min(score, 1),
-  };
-}
-
-
-// ---------------------------------------------
-// HELPER
-// ---------------------------------------------
-
-function average(...values) {
-  return (
-    values.reduce((sum, value) => sum + value, 0) /
-    values.length
-  );
-}
-
-
-// ---------------------------------------------
-// STYLES
-// ---------------------------------------------
 
 const styles = {
   container: {
