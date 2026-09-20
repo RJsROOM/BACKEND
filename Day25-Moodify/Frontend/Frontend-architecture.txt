@@ -1,0 +1,10 @@
+there are four layers in authentication and authorisation in Frontend: ui, hooks, state and api layers
+
+1. UI=> Ui dikhana or navigation karna( handles pages and components folders)
+
+2. Hooks layer => this handles all the state and apis and handles the hooks folder
+
+3. state layer => it stores all the data this handles the data storing files like auth.context.jsx or post.context.js
+
+4. API layer => backend se communicate krne k lie hm use krte h and iske lie hm [services folder k andr files bnate h jese authenitcation k lie use hoga auth.api.js and posts k lie use hoga posts.api.js]
+
