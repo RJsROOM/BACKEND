@@ -8,26 +8,27 @@ async function uploadSong(req,res){
     const {mood}= req.body
 
     const metadata= await musicMetaData.parseBuffer(songBuffer);
-    
-    const songFile= await storageService.uploadFile({
+
+    const picture = metadata.common.picture?.[0];
+    const title = metadata.common.title || "Unknown Song";
+
+    // we use Promise.all() to manage all the async operations at once. it sayas if and only if(iff) the objects in it give some response we can not move aheads wiht the code. also promise.all() recives teh an array of items....this all optimizes our code with 33% atleast.
+    const [songFile, posterFile]= await Promise.all([
+        storageService.uploadFile({
         buffer: songBuffer,
         filename: metadata.common.title + ".mp3",
         folder: "moodster/songs"
-    })
-
-    let posterFile = null;
-
-    const picture = metadata.common.picture?.[0];
-
-    if (picture) {
-        posterFile = await storageService.uploadFile({
+        }),
+        picture ? 
+            storageService.uploadFile({
             buffer: picture.data,
             filename: metadata.common.title + ".jpeg",
             folder: "moodster/posters"
-        });
-    }
+            })
+        : null
+    ])
 
-    const title = metadata.common.title || "Unknown Song";
+    
     const song= await songModel.create({
         title: title,
         url: songFile.url,
@@ -41,6 +42,19 @@ async function uploadSong(req,res){
     })
 }
 
+async function getSong(req,res){
+    const {mood} = req.query
+
+    const song= await songModel.findOne({
+        mood
+    })
+
+    res.status(200).json({
+        message: "song fetched successfully",
+        song
+    })
+}
 
 
-module.exports= {uploadSong};
+
+module.exports= {uploadSong, getSong};
