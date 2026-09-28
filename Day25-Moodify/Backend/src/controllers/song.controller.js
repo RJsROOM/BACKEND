@@ -27,9 +27,9 @@ async function uploadSong(req,res){
         });
     }
 
-    
+    const title = metadata.common.title || "Unknown Song";
     const song= await songModel.create({
-        title: metadata.common.title,
+        title: title,
         url: songFile.url,
         posterUrl: posterFile?.url || null,
         mood
