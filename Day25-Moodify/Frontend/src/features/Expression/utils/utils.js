@@ -11,8 +11,8 @@ export const init = async ({
   faceLandmarkerRef,
   videoRef,
   streamRef,
-  setExpression,
-  setConfidence,
+  onReady,
+  onError,
 }) => {
   try {
     // Load MediaPipe vision tasks
@@ -60,23 +60,15 @@ export const init = async ({
 
     streamRef.current = stream;
 
-    if (!videoRef.current) return;
+    if (!videoRef.current) {
+      throw new Error("Camera preview is unavailable.");
+    }
 
     videoRef.current.srcObject = stream;
-
-    videoRef.current.onloadeddata = () => {
-      detectExpression({
-        faceLandmarkerRef,
-        videoRef,
-        setExpression,
-        setConfidence,
-        animationFrameRef: null,
-      });
-    };
+    videoRef.current.onloadeddata = onReady;
   } catch (error) {
     console.error("MediaPipe Error:", error);
-
-    setExpression("Camera Error");
+    onError?.(error);
   }
 };
 
@@ -87,30 +79,17 @@ export const init = async ({
 export const detectExpression = ({
   faceLandmarkerRef,
   videoRef,
-  setExpression,
-  setConfidence,
 }) => {
   if (
     !videoRef.current ||
     !faceLandmarkerRef.current
   ) {
-    return;
+    return null;
   }
 
   const video = videoRef.current;
 
-  if (video.readyState < 2) {
-    requestAnimationFrame(() =>
-      detectExpression({
-        faceLandmarkerRef,
-        videoRef,
-        setExpression,
-        setConfidence,
-      })
-    );
-
-    return;
-  }
+  if (video.readyState < 2) return null;
 
   try {
     const result =
@@ -139,31 +118,14 @@ export const detectExpression = ({
       });
 
       // Get expression
-      const detected = getExpression(scores);
-
-      setExpression(detected.name);
-
-      setConfidence(detected.confidence);
-    } else {
-      setExpression("No Face Detected");
-      setConfidence(0);
+      return getExpression(scores);
     }
-  } catch (error) {
-    console.error(
-      "Expression Detection Error:",
-      error
-    );
-  }
 
-  // Continue detection
-  requestAnimationFrame(() =>
-    detectExpression({
-      faceLandmarkerRef,
-      videoRef,
-      setExpression,
-      setConfidence,
-    })
-  );
+    return { name: "No Face Detected", confidence: 0 };
+  } catch (error) {
+    console.error("Expression Detection Error:", error);
+    throw error;
+  }
 };
 
 // ---------------------------------------------

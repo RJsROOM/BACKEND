@@ -1,23 +1,26 @@
-import {createContext, useState} from "react";
+import { createContext, useState } from "react";
 
+export const SongContext = createContext(null);
 
-export const SongContext= createContext();
-
-export const SongContextProvider= ({children})=>{
-
-    const [song, setSong] = useState({
-        "url": "https://ik.imagekit.io/qbtyrmiqx/moodster/songs/undefined_EhbTQSQ21.mp3",
-        "posterUrl": null,
-        "title": "Unknown Song",
-        "mood": "happy",
-    })
-
-
-    const [loading, setLoading] = useState(false)
+export const SongContextProvider = ({ children }) => {
+    const [song, setSong] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [playbackRate, setPlaybackRate] = useState(1);
+    const [savedExpression, setSavedExpression] = useState(null);
 
     return (
-        <SongContext.Provider 
-            value= {{loading, setLoading, song, setSong}}>
+        <SongContext.Provider
+            value={{
+                loading,
+                setLoading,
+                song,
+                setSong,
+                playbackRate,
+                setPlaybackRate,
+                savedExpression,
+                setSavedExpression,
+            }}
+        >
             {children}
         </SongContext.Provider>
     )
