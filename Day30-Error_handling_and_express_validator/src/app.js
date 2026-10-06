@@ -5,6 +5,8 @@ import handleError from "./middleware/error.middleware.js";
 
 const app= express();
 
+app.use(express.json()); // this is a middleware which will parse the incoming request body and make it available in req.body
+
 app.use("/api/auth", authRouter);
 
 
