@@ -1,0 +1,3 @@
+for making a chat based application we might have faced issues with continuous GTE/POST requests on the server to chekc if the other perosn has sent something or not.
+                        the HTTPS protocol works like this only as its process ends by just sending requests and recieving any response. and there remains no proper connection which is continuous and regularly maintainable.
+This problem is solved using Soctet.io, it establishes a connection with our servers and thorugh which we do not have to continuously make make or submit requests on our servers.
