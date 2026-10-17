@@ -1,0 +1,44 @@
+features--
+    1. Authentication system
+        {
+            register user
+            verify user by their email
+            login user
+            logout user
+        }
+    2. chat with AI
+    3. chat history
+    4. message storage so that user can go to prevous messages
+    5. AI with internet research feature
+
+when we are reqired to select the messages to store in our database then that is called DATA MODELLING.
+in a more detailed way Data modeling is the process of creating a visual blueprint that defines how data is structured, stored, and related within an information system to ensure consistency and efficient retrieval.
+
+
+user model: 
+    {
+        _id,
+        username,
+        email,
+        password,
+        verified (yes/no)-bydefault false,
+        createdAt,
+        updatedAt
+    }
+
+chat model: 
+    {
+        _id,
+        user,
+        title,
+        createdAt,
+        updatedAt
+    }
+
+message model: 
+    {
+        _id,
+        chat reference,
+        content,
+        role-[user,ai],
+    }
