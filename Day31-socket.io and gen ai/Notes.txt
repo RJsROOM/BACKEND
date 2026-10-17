@@ -1,3 +1,11 @@
 for making a chat based application we might have faced issues with continuous GTE/POST requests on the server to chekc if the other perosn has sent something or not.
                         the HTTPS protocol works like this only as its process ends by just sending requests and recieving any response. and there remains no proper connection which is continuous and regularly maintainable.
 This problem is solved using Soctet.io, it establishes a connection with our servers and thorugh which we do not have to continuously make make or submit requests on our servers.
+
+one thing to rememebr when using socket.io, whenever you see "io" it means there is something wrirtten for teh server and whenerv you see "socket" that means a single client.
+
+the socket in the socket io works on teh events like click, doubleclick, hover etc.
+
+events in socket are like-
+1. on: events ko listen krna
+2. emit: event ko fire krna

@@ -10,7 +10,14 @@ const io = new Server(httpServer, {
 });
 
 
-io.on("connection", (socket) => {});
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  socket.on("message", (msg)=>{
+    console.log("User fired a message");
+    console.log(msg)
+  });
+});
 
 
 httpServer.listen(3000, () => {
