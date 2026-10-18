@@ -1,8 +1,8 @@
-import { router} from 'express';
+import { Router} from 'express';
 import { registerController} from '../controllers/auth.controller.js';
 import { registerValidator} from '../validators/auth.validator.js';
 
-const authRouter= router();
+const authRouter= Router();
 
 /*
     @route POST /api/auth/register
