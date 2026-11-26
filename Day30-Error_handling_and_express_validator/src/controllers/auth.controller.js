@@ -1,14 +1,10 @@
 export async function registerUser(req,res){
-    // try{
-    //     throw new Error("encountred an error while registering user")
-    // }catch(err){
-    //     next(err);
-    // }
-
-    try{
-        const err= new Error("encountred an error while registering user");
-    }catch(err){
-        err.status= 400; // this is the status code for bad request
-        next(err); // this will pass the error to the error handling middleware which we have created in the error.middleware.js file and we have used it in our app.js file.
-    }
+    throw new Error("This is a custom error test");
 }
+
+
+/*
+- there s an inbuilt error-handler in the epress and which doen't stops our server form running but it will send the error message to the client and also it will log the error in the console.
+
+- the response form this comes in teh html format but we want our error to be in the json format for this we will create our own custom error handler and we will use it in the app.js file.
+*/
